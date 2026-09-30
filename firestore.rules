@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() { return signedIn() && request.auth.uid == "bpwmG7YDuTWhPvxpmUGgdbxQT7r2"; }
+
+    match /admins/{uid} {
+      allow read: if isSelf(uid);
+      allow write: if false;
+    }
+
+    match /users/{uid} {
+      allow create: if isSelf(uid) || isAdmin();
+      allow read: if isSelf(uid) || isAdmin();
+      allow update: if isAdmin() || (isSelf(uid) && request.resource.data.uid == uid);
+      allow delete: if isSelf(uid) || isAdmin();
+    }
+
+    match /projects/{projectId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        signedIn()
+        && resource.data.published == true
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloadCount','updatedAt'])
+        && request.resource.data.downloadCount == resource.data.downloadCount + 1
+      );
+    }
+
+    match /ratings/{ratingId} {
+      allow read: if true;
+      allow create: if isAdmin() || (signedIn() && request.resource.data.userId == request.auth.uid);
+      allow update, delete: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid);
+    }
+
+    match /wishlists/{wishlistId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isAdmin() || (signedIn() && request.resource.data.userId == request.auth.uid);
+      allow update: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+    }
+
+    match /messages/{messageId} {
+      allow create: if isAdmin() || (signedIn() && request.resource.data.userId == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow create: if isAdmin() || (signedIn() && request.resource.data.recipientId == request.auth.uid);
+      allow read: if isAdmin() || (signedIn() && resource.data.recipientId == request.auth.uid);
+      allow update: if isAdmin() || (signedIn() && resource.data.recipientId == request.auth.uid && request.resource.data.recipientId == request.auth.uid);
+      allow delete: if isAdmin() || (signedIn() && resource.data.recipientId == request.auth.uid);
+    }
+
+    match /downloads/{downloadId} {
+      allow create: if signedIn()
+        && request.resource.data.projectId is string
+        && request.resource.data.userId == request.auth.uid
+        && exists(/databases/$(database)/documents/projects/$(request.resource.data.projectId))
+        && get(/databases/$(database)/documents/projects/$(request.resource.data.projectId)).data.published == true;
+      allow read: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+  }
+}
