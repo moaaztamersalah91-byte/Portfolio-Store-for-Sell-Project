@@ -1,0 +1,4 @@
+Cleaned project:
+- Removed Firebase / Firestore / database-related project files and source references.
+- Removed reservation / booking / thank-you page files and navigation references.
+- Converted WebP/SVG image assets to PNG where applicable and updated source references.
