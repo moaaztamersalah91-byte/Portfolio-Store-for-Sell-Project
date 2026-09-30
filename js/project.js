@@ -2,7 +2,7 @@
   const root=document.getElementById('projectDetail');
   if(!root)return;
   const DISPLAY_NAMES={'barber-website':'Barbur Website','clothing-store':'Clothing Store Website','coffee-website':'Coffe Website','dental-clinic':'Dental Clinic Website','fitness-website':'Fitness Website','hospital-website':'Hospital Website','hotel-website':'Hotel Website','luxury-interior-design':'Luxury Interior Design Website','luxury-jewelry':'Luxury Jewelry Website','motif-motors':'Cars Store Website','north-and-co':'NORTH & CO Website','photography-studio':'Photography Studio Website','real-estate':'Real Estate Website','restaurant':'Restaurent WebSite','wander-travel':'Wander Travel Website'};
-  function applyDisplayName(){const n=DISPLAY_NAMES[p.slug||id];if(n)p.name={en:n,ar:n};}
+  function cleanPath(path){return String(path||'').replace(/^(?:\.\.\/)+/,'')} function applyDisplayName(){p.path=cleanPath(p.path);const n=DISPLAY_NAMES[p.slug||id];if(n)p.name={en:n,ar:n};}
   const id=new URLSearchParams(location.search).get('id')||PORTFOLIO.projects[0].slug;
   let p=PORTFOLIO.projects.find(x=>x.slug===id)||PORTFOLIO.projects[0];
 
