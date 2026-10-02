@@ -39,6 +39,9 @@ function applyLanguage() {
     button.setAttribute('aria-label', lang === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية');
     button.setAttribute('title', lang === 'en' ? 'Switch to Arabic' : 'التبديل إلى الإنجليزية');
   });
+
+  const mobileToggle = document.querySelector('.mobile-menu-toggle');
+  if (mobileToggle) mobileToggle.setAttribute('aria-label', mobileToggle.classList.contains('open') ? (lang === 'ar' ? 'إغلاق القائمة' : 'Close menu') : (lang === 'ar' ? 'فتح القائمة' : 'Open menu'));
 }
 
 function applyTheme() {
@@ -67,7 +70,56 @@ function toggleLang() {
   applyLanguage();
 }
 
+
+function setupMobileMenu() {
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const menu = document.querySelector('#mobileMenu');
+  if (!toggle || !menu) return;
+
+  const closeMenu = () => {
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', lang === 'ar' ? 'فتح القائمة' : 'Open menu');
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden', 'true');
+  };
+
+  const openMenu = () => {
+    toggle.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', lang === 'ar' ? 'إغلاق القائمة' : 'Close menu');
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden', 'false');
+  };
+
+  toggle.addEventListener('click', () => {
+    if (menu.classList.contains('open')) closeMenu();
+    else openMenu();
+  });
+
+  menu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (menu.classList.contains('open') && !menu.contains(event.target) && !toggle.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) closeMenu();
+  });
+
+  return { closeMenu };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  setupMobileMenu();
   apply();
 
   document.querySelectorAll('[data-theme]').forEach((button) => {
