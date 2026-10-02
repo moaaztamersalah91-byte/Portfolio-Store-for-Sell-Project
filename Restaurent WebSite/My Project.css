@@ -2238,3 +2238,611 @@ body footer {
     }
 }
 
+
+
+
+/* =========================================================
+   MOBILE OVERHAUL — TASTE HOUSE
+   Safe responsive layer; desktop styles remain unchanged.
+   ========================================================= */
+
+html {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+img,
+video,
+iframe {
+    max-width: 100%;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+
+    /* ---------- HEADER ---------- */
+    header {
+        min-height: 76px !important;
+        height: auto !important;
+        padding: 10px 14px !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        overflow: hidden;
+    }
+
+    #img_header {
+        width: 52px !important;
+        height: 52px !important;
+        flex: 0 0 52px;
+    }
+
+    header #title {
+        min-width: 0;
+        margin: 0 !important;
+        font-size: clamp(15px, 4.2vw, 20px) !important;
+        line-height: 1.25 !important;
+        overflow-wrap: anywhere;
+    }
+
+    /* ---------- MOBILE NAV ---------- */
+    nav {
+        position: sticky !important;
+        top: 0;
+        width: 100%;
+        min-height: 54px;
+        z-index: 5000;
+        overflow: visible !important;
+        box-shadow: 0 5px 18px rgba(0,0,0,.16);
+    }
+
+    nav::before {
+        content: "MENU";
+        position: absolute;
+        inset-inline-start: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,.78);
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .18em;
+        pointer-events: none;
+    }
+
+    .mobile-nav-toggle {
+        display: flex !important;
+        position: absolute;
+        inset-inline-end: 12px;
+        top: 8px;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        margin: 0;
+        border: 1px solid rgba(255,255,255,.28);
+        border-radius: 10px;
+        background: rgba(0,0,0,.14);
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+        cursor: pointer;
+        z-index: 20;
+    }
+
+    .mobile-nav-toggle span {
+        display: block;
+        width: 17px;
+        height: 2px;
+        border-radius: 99px;
+        background: #fff;
+        transition: transform .22s ease, opacity .18s ease;
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    nav > ul {
+        display: none !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-height: min(78vh, 620px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+        padding: 10px !important;
+        margin: 54px 0 0 !important;
+        background: #b71c1c;
+        border-top: 1px solid rgba(255,255,255,.15);
+        box-shadow: 0 18px 35px rgba(0,0,0,.28);
+    }
+
+    nav.mobile-open > ul {
+        display: flex !important;
+    }
+
+    nav > ul > li {
+        width: 100% !important;
+        flex: 0 0 auto !important;
+        display: block !important;
+    }
+
+    nav > ul > li:empty {
+        display: none !important;
+    }
+
+    nav > ul > li > a,
+    nav > ul > li > button {
+        width: 100% !important;
+        min-height: 44px;
+        margin: 0 !important;
+        padding: 11px 13px !important;
+        border-radius: 9px;
+        font-size: 14px !important;
+        line-height: 1.25;
+        text-align: start !important;
+        white-space: normal !important;
+    }
+
+    nav > ul > li > a {
+        color: #fff;
+    }
+
+    nav > ul > li > a:hover,
+    nav > ul > li > a:focus-visible,
+    nav > ul > li > button:hover,
+    nav > ul > li > button:focus-visible {
+        background: rgba(255,255,255,.14) !important;
+        color: #fff !important;
+        transform: none !important;
+        outline: none;
+    }
+
+    #languageBtn,
+    #themeBtn {
+        min-width: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 11px 13px !important;
+        font-size: 13px !important;
+        text-align: start !important;
+        border-radius: 9px !important;
+        box-shadow: none !important;
+    }
+
+    /* Recipe submenu becomes a real mobile accordion. */
+    nav ul li > ul {
+        position: static !important;
+        display: none !important;
+        width: 100% !important;
+        max-height: none !important;
+        margin: 4px 0 4px !important;
+        padding: 4px !important;
+        background: rgba(0,0,0,.14) !important;
+        border-radius: 9px;
+        box-shadow: none !important;
+        overflow: visible !important;
+    }
+
+    nav ul li.mobile-submenu-open > ul {
+        display: flex !important;
+    }
+
+    nav ul li > ul li a {
+        width: 100% !important;
+        min-height: 40px;
+        padding: 9px 11px !important;
+        border: 0 !important;
+        border-radius: 7px;
+        font-size: 13px !important;
+        white-space: normal !important;
+        text-align: start !important;
+    }
+
+    /* ---------- SHARED CONTENT ---------- */
+    .body_home,
+    .body_menu,
+    .body_chefs,
+    .body_gallery,
+    .body_order,
+    .body_crispy_Chicken {
+        width: min(94%, 680px) !important;
+        max-width: 680px;
+        margin: 24px auto !important;
+    }
+
+    /* Tables were used as layout grids in the original project.
+       Convert them to clean one-column mobile cards. */
+    .body_home table,
+    .body_menu table,
+    .body_chefs table,
+    .body_gallery table {
+        width: 100% !important;
+        border-spacing: 0 !important;
+        border-collapse: separate;
+        display: block !important;
+    }
+
+    .body_home tbody,
+    .body_menu tbody,
+    .body_chefs tbody,
+    .body_gallery tbody {
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        width: 100%;
+    }
+
+    .body_home tr,
+    .body_menu tr,
+    .body_chefs tr,
+    .body_gallery tr {
+        display: contents !important;
+    }
+
+    .body_home td,
+    .body_menu td,
+    .body_chefs td,
+    .body_gallery td {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .body_home article,
+    .body_menu article,
+    .body_chefs article,
+    .body_gallery article {
+        width: 100%;
+        margin: 0 !important;
+        transform: none !important;
+    }
+
+    .body_home article img,
+    .body_menu article img,
+    .body_chefs article img,
+    .body_gallery article img {
+        width: 100% !important;
+        max-width: 100%;
+        display: block;
+        object-fit: cover;
+    }
+
+    /* ---------- HOME ---------- */
+    #img_1 {
+        width: 100% !important;
+        height: clamp(190px, 58vw, 330px) !important;
+        border-radius: 14px;
+    }
+
+    #h2_1 {
+        margin: 16px 4px 0 !important;
+        font-size: clamp(18px, 5vw, 25px) !important;
+        line-height: 1.45 !important;
+    }
+
+    #h1_1 {
+        margin: 8px 0 !important;
+        font-size: 13px !important;
+    }
+
+    .prev,
+    .next {
+        width: 42px !important;
+        height: 42px !important;
+        margin: 12px 5px !important;
+        font-size: 19px !important;
+    }
+
+    .body_home article img {
+        height: clamp(190px, 50vw, 250px) !important;
+    }
+
+    .body_home article p {
+        padding: 17px !important;
+        font-size: 15px !important;
+        line-height: 1.8 !important;
+        text-align: start !important;
+    }
+
+    /* ---------- MENU / CHEFS ---------- */
+    .body_menu article img {
+        height: clamp(185px, 55vw, 250px) !important;
+    }
+
+    .body_chefs article img {
+        height: clamp(220px, 65vw, 310px) !important;
+    }
+
+    #name_title,
+    #rating_title,
+    #price_title,
+    #name,
+    #rating,
+    #price,
+    #Age_title,
+    #experience_title,
+    #Age,
+    #experience {
+        font-size: 16px !important;
+    }
+
+    #name,
+    #rating,
+    #price,
+    #Age,
+    #experience {
+        margin-inline-start: 5px !important;
+    }
+
+    #description,
+    .body_chefs #description {
+        width: 90% !important;
+        font-size: 14px !important;
+        line-height: 1.8 !important;
+    }
+
+    #order_now {
+        width: calc(100% - 30px) !important;
+        max-width: 320px;
+        margin: 14px auto 24px !important;
+        display: block;
+        padding: 12px 16px !important;
+        font-size: 15px !important;
+    }
+
+    /* ---------- GALLERY ---------- */
+    .body_gallery article img {
+        height: clamp(190px, 58vw, 280px) !important;
+    }
+
+    /* ---------- ORDER PAGE ---------- */
+    .body_order {
+        padding: 0 !important;
+    }
+
+    .order_title {
+        margin-bottom: 24px !important;
+    }
+
+    .order_title h1 {
+        font-size: clamp(27px, 8vw, 38px) !important;
+        line-height: 1.2;
+    }
+
+    .order_title p {
+        font-size: 14px !important;
+        line-height: 1.7;
+    }
+
+    .order_container {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+    }
+
+    .order_meal,
+    .customer_information {
+        width: 100%;
+        padding: 20px !important;
+        border-radius: 16px !important;
+    }
+
+    .order_meal h2,
+    .customer_information h2 {
+        font-size: 21px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .order_row {
+        gap: 12px;
+        padding: 14px 0 !important;
+        font-size: 15px !important;
+        flex-wrap: wrap;
+    }
+
+    .order_row strong {
+        font-size: 17px !important;
+    }
+
+    .quantity_controls {
+        gap: 14px !important;
+    }
+
+    .quantity_controls button {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 23px !important;
+    }
+
+    .order_total {
+        font-size: 18px !important;
+    }
+
+    .order_total strong {
+        font-size: 23px !important;
+    }
+
+    .customer_information label {
+        font-size: 14px !important;
+    }
+
+    .customer_information input,
+    .customer_information textarea {
+        font-size: 16px !important;
+        padding: 12px 13px !important;
+    }
+
+    /* ---------- RECIPE PAGES ---------- */
+    .body_crispy_Chicken {
+        padding: 18px !important;
+        border-radius: 16px !important;
+        overflow-wrap: anywhere;
+    }
+
+    .body_crispy_Chicken #title {
+        font-size: clamp(23px, 7vw, 31px) !important;
+        line-height: 1.25 !important;
+        margin-bottom: 17px !important;
+    }
+
+    .body_crispy_Chicken img {
+        width: 100% !important;
+        height: clamp(190px, 58vw, 300px) !important;
+        object-fit: cover;
+        border-radius: 13px;
+    }
+
+    .body_crispy_Chicken #About,
+    .body_crispy_Chicken #ingredients,
+    .body_crispy_Chicken #Preparation_Steps,
+    .body_crispy_Chicken #Recipe_Information {
+        font-size: 19px !important;
+        line-height: 1.4 !important;
+        margin-top: 18px;
+    }
+
+    .body_crispy_Chicken #p_about,
+    .body_crispy_Chicken #p_ingredients,
+    .body_crispy_Chicken #p_Preparation_Steps,
+    .body_crispy_Chicken #p_Recipe_Information,
+    .body_crispy_Chicken #p_2_Recipe_Information {
+        font-size: 14px !important;
+        line-height: 1.85 !important;
+        overflow-wrap: anywhere;
+    }
+
+    .body_crispy_Chicken ul,
+    .body_crispy_Chicken ol {
+        margin-inline: 0 !important;
+        padding-inline-start: 22px !important;
+    }
+
+    .body_crispy_Chicken li {
+        line-height: 1.75 !important;
+        margin-bottom: 8px !important;
+        overflow-wrap: anywhere;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+        margin-top: 30px !important;
+        padding: 20px 14px !important;
+    }
+
+    footer h1 {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+    }
+}
+
+@media (max-width: 420px) {
+    header {
+        padding-inline: 10px !important;
+    }
+
+    #img_header {
+        width: 46px !important;
+        height: 46px !important;
+        flex-basis: 46px;
+    }
+
+    header #title {
+        font-size: 14px !important;
+    }
+
+    nav::before {
+        inset-inline-start: 14px;
+        font-size: 9px;
+    }
+
+    .mobile-nav-toggle {
+        width: 36px;
+        height: 36px;
+        top: 9px;
+        inset-inline-end: 9px;
+    }
+
+    .mobile-nav-toggle span {
+        width: 16px;
+    }
+
+    nav > ul {
+        margin-top: 54px !important;
+        padding: 8px !important;
+    }
+
+    .body_home,
+    .body_menu,
+    .body_chefs,
+    .body_gallery,
+    .body_order,
+    .body_crispy_Chicken {
+        width: 92% !important;
+    }
+
+    .order_meal,
+    .customer_information,
+    .body_crispy_Chicken {
+        padding: 16px !important;
+    }
+}
+
+@media (max-width: 350px) {
+    header #title {
+        font-size: 13px !important;
+    }
+
+    nav > ul > li > a,
+    nav > ul > li > button {
+        min-height: 42px;
+        font-size: 13px !important;
+    }
+
+    .body_home,
+    .body_menu,
+    .body_chefs,
+    .body_gallery,
+    .body_order,
+    .body_crispy_Chicken {
+        width: 94% !important;
+    }
+}
+
+/* Desktop: hamburger is completely absent. */
+.mobile-nav-toggle {
+    display: none;
+}
+
+/* Final mobile visibility corrections */
+@media (max-width: 768px) {
+    .mobile-nav-toggle {
+        display: flex !important;
+    }
+    html[dir="rtl"] nav::before {
+        content: "القائمة";
+    }
+}

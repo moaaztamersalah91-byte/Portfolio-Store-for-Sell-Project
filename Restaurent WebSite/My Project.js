@@ -374,3 +374,154 @@ changeLanguage();
 
 })();
 
+
+
+// ==================================================
+// MOBILE NAVIGATION
+// ==================================================
+
+(function initMobileNavigation() {
+
+    var nav = document.querySelector("nav");
+    var navList = document.querySelector("nav > ul");
+
+    if (!nav || !navList) {
+        return;
+    }
+
+    if (document.querySelector(".mobile-nav-toggle")) {
+        return;
+    }
+
+    var toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "mobile-nav-toggle";
+    toggle.setAttribute("aria-label", "Open navigation");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-controls", "mobile-site-navigation");
+
+    toggle.innerHTML =
+        "<span></span><span></span><span></span>";
+
+    navList.id = "mobile-site-navigation";
+    nav.insertBefore(toggle, navList);
+
+    function closeMenu() {
+        nav.classList.remove("mobile-open");
+        toggle.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute(
+            "aria-label",
+            currentLanguage === "ar"
+                ? "فتح القائمة"
+                : "Open navigation"
+        );
+    }
+
+    function openMenu() {
+        nav.classList.add("mobile-open");
+        toggle.classList.add("is-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute(
+            "aria-label",
+            currentLanguage === "ar"
+                ? "إغلاق القائمة"
+                : "Close navigation"
+        );
+    }
+
+    toggle.addEventListener("click", function () {
+        if (nav.classList.contains("mobile-open")) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    // Recipes works as a mobile accordion instead of relying on hover.
+    var topItems = navList.querySelectorAll(":scope > li");
+
+    topItems.forEach(function (li) {
+
+        var submenu = li.querySelector(":scope > ul");
+        var parentLink = li.querySelector(":scope > a");
+
+        if (submenu && parentLink) {
+
+            parentLink.addEventListener("click", function (event) {
+
+                if (window.matchMedia("(max-width: 768px)").matches) {
+
+                    event.preventDefault();
+
+                    var wasOpen =
+                        li.classList.contains("mobile-submenu-open");
+
+                    navList.querySelectorAll(
+                        ":scope > li.mobile-submenu-open"
+                    ).forEach(function (item) {
+                        item.classList.remove("mobile-submenu-open");
+                    });
+
+                    if (!wasOpen) {
+                        li.classList.add("mobile-submenu-open");
+                    }
+                }
+
+            });
+        }
+    });
+
+    // Close after selecting a real page.
+    navList.querySelectorAll("a").forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            if (
+                window.matchMedia("(max-width: 768px)").matches &&
+                link.getAttribute("href") !== "#"
+            ) {
+                closeMenu();
+            }
+
+        });
+    });
+
+    // Close when tapping outside the navigation.
+    document.addEventListener("click", function (event) {
+
+        if (
+            window.matchMedia("(max-width: 768px)").matches &&
+            nav.classList.contains("mobile-open") &&
+            !nav.contains(event.target)
+        ) {
+            closeMenu();
+        }
+
+    });
+
+    // Escape closes the menu.
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeMenu();
+        }
+
+    });
+
+    // Reset mobile-only state when returning to desktop.
+    window.addEventListener("resize", function () {
+
+        if (!window.matchMedia("(max-width: 768px)").matches) {
+            closeMenu();
+
+            navList.querySelectorAll(
+                ":scope > li.mobile-submenu-open"
+            ).forEach(function (item) {
+                item.classList.remove("mobile-submenu-open");
+            });
+        }
+
+    });
+
+})();
