@@ -2,7 +2,7 @@
   const root=document.getElementById('projectDetail');
   if(!root)return;
   const DISPLAY_NAMES={'barber-website':'Barbur Website','clothing-store':'Clothing Store Website','coffee-website':'Coffe Website','dental-clinic':'Dental Clinic Website','fitness-website':'Fitness Website','hospital-website':'Hospital Website','hotel-website':'Hotel Website','luxury-interior-design':'Luxury Interior Design Website','luxury-jewelry':'Luxury Jewelry Website','motif-motors':'Cars Store Website','north-and-co':'NORTH & CO Website','photography-studio':'Photography Studio Website','real-estate':'Real Estate Website','restaurant':'Restaurent WebSite','wander-travel':'Wander Travel Website'};
-  function cleanPath(path){return String(path||'').replace(/^(?:\.\.\/)+/,'')} function applyDisplayName(){p.path=cleanPath(p.path);const n=DISPLAY_NAMES[p.slug||id];if(n)p.name={en:n,ar:n};}
+  function applyDisplayName(){const n=DISPLAY_NAMES[p.slug||id];if(n)p.name={en:n,ar:n};}
   const id=new URLSearchParams(location.search).get('id')||PORTFOLIO.projects[0].slug;
   let p=PORTFOLIO.projects.find(x=>x.slug===id)||PORTFOLIO.projects[0];
 
@@ -36,11 +36,20 @@
     await remote();
     applyDisplayName();
     const lang=document.documentElement.lang;
-    root.innerHTML=`<section class="project-detail section-pad"><a class="back-link" href="projects.html">← <span data-i18n="backToArchive">Back to archive</span></a><div class="detail-head"><div><span class="section-index">${String(PORTFOLIO.projects.indexOf(p)+1).padStart(2,'0')}</span><span class="project-cat">${p.cat[lang]}</span><h1>${p.name[lang]}</h1><p>${p.desc[lang]}</p><div class="detail-stats"><span>↓ ${Number(p.downloadCount||0)} ${window.MOAazT('downloads')}</span></div></div><div class="detail-cover"><img src="${p.cover}" alt=""></div></div><div class="detail-body"><div><span class="section-index">02</span><h2 data-i18n="projectOverview">Project overview</h2><div class="project-detail-actions"><a class="btn btn-solid" href="${encodeURI(p.path||'#')}" target="_blank" rel="noopener" data-i18n="liveDemo">Explore</a><a class="btn btn-outline js-download" data-project-id="${p.slug}" href="${encodeURI(p.download||'#')}" download data-i18n="download">Download</a></div></div><div><p>${p.desc[lang]} ${lang==='ar'?'تم بناء الواجهة لتكون واضحة وسريعة وقابلة للتطوير مع الحفاظ على شخصية بصرية مستقلة.':'Built as a focused frontend experience with a strong visual point of view, responsive structure and a distinct interaction rhythm.'}</p><div class="tag-list">${(p.tags||[]).slice(0,8).map(t=>`<span>${t}</span>`).join('')}</div></div></div></section>`;
+    root.innerHTML=`<section class="project-detail section-pad"><a class="back-link" href="projects.html">← <span data-i18n="backToArchive">Back to archive</span></a><div class="detail-head"><div><span class="section-index">${String(PORTFOLIO.projects.indexOf(p)+1).padStart(2,'0')}</span><span class="project-cat">${p.cat[lang]}</span><h1>${p.name[lang]}</h1><p>${p.desc[lang]}</p><div class="detail-stats"><span>↓ ${Number(p.downloadCount||0)} ${window.MOAazT('downloads')}</span></div></div><div class="detail-cover"><img src="${p.cover}" alt=""></div></div><div class="detail-body"><div><span class="section-index">02</span><h2 data-i18n="projectOverview">Project overview</h2><div class="project-detail-actions"><a class="btn btn-solid" href="${resolveProjectUrl(p.path||'#')}" target="_blank" rel="noopener" data-i18n="liveDemo">Explore</a><a class="btn btn-outline js-download" data-project-id="${p.slug}" href="${encodeURI(p.download||'#')}" download data-i18n="download">Download</a></div></div><div><p>${p.desc[lang]} ${lang==='ar'?'تم بناء الواجهة لتكون واضحة وسريعة وقابلة للتطوير مع الحفاظ على شخصية بصرية مستقلة.':'Built as a focused frontend experience with a strong visual point of view, responsive structure and a distinct interaction rhythm.'}</p><div class="tag-list">${(p.tags||[]).slice(0,8).map(t=>`<span>${t}</span>`).join('')}</div></div></div></section>`;
     if(window.MOAazT)root.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=window.MOAazT(e.dataset.i18n));
     bind();
   }
 
+  function resolveProjectUrl(path){
+    const raw=String(path||'').trim();
+    if(!raw)return '#';
+    if(/^(?:https?:|mailto:|tel:|#)/i.test(raw))return raw;
+    const parts=location.pathname.split('/').filter(Boolean);
+    const base=(location.hostname.endsWith('.github.io')&&parts.length)?`/${parts[0]}/`:'/';
+    const clean=raw.replace(/^(?:\.\.\/|\.\/)+/,'').replace(/^\/+/, '');
+    return new URL(clean,location.origin+base).href;
+  }
   function bind(){
     const d=document.querySelector('.js-download');
     if(d&&!d.dataset.bound){
