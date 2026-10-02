@@ -311,13 +311,39 @@
 
   function initGlobalEvents() {
     document.querySelectorAll('.menu-btn').forEach(button => {
+      const nav = button.closest('.nav')?.querySelector('.nav-links');
+      if (!nav) return;
+      nav.id = nav.id || 'mobile-navigation';
+      button.setAttribute('type', 'button');
+      button.setAttribute('aria-controls', nav.id);
       button.setAttribute('aria-expanded', 'false');
-      button.setAttribute('aria-label', 'Open menu');
-      button.addEventListener('click', () => {
-        const nav = document.querySelector('.nav-links');
-        const open = nav?.classList.toggle('open');
-        button.setAttribute('aria-expanded', String(Boolean(open)));
-        button.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      button.setAttribute('aria-label', currentLanguage === 'ar' ? 'فتح القائمة' : 'Open menu');
+
+      button.addEventListener('click', event => {
+        event.stopPropagation();
+        const open = nav.classList.toggle('open');
+        button.setAttribute('aria-expanded', String(open));
+        button.setAttribute('aria-label', open
+          ? (currentLanguage === 'ar' ? 'إغلاق القائمة' : 'Close menu')
+          : (currentLanguage === 'ar' ? 'فتح القائمة' : 'Open menu'));
+      });
+
+      nav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('open');
+          button.setAttribute('aria-expanded', 'false');
+          button.setAttribute('aria-label', currentLanguage === 'ar' ? 'فتح القائمة' : 'Open menu');
+        });
+      });
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      document.querySelectorAll('.nav-links.open').forEach(nav => {
+        nav.classList.remove('open');
+        const menu = nav.closest('.nav')?.querySelector('.menu-btn');
+        menu?.setAttribute('aria-expanded', 'false');
+        menu?.setAttribute('aria-label', currentLanguage === 'ar' ? 'فتح القائمة' : 'Open menu');
       });
     });
 
@@ -325,13 +351,15 @@
       const wish = event.target.closest('[data-wish]');
       if (wish) toggleWish(wish.dataset.wish, wish);
 
-      const nav = document.querySelector('.nav-links');
-      const menu = document.querySelector('.menu-btn');
-      if (nav?.classList.contains('open') && !event.target.closest('.nav') && !event.target.closest('.menu-btn')) {
-        nav.classList.remove('open');
-        menu?.setAttribute('aria-expanded', 'false');
-        menu?.setAttribute('aria-label', 'Open menu');
-      }
+      document.querySelectorAll('.nav-links.open').forEach(nav => {
+        const navRoot = nav.closest('.nav');
+        if (navRoot && !navRoot.contains(event.target)) {
+          nav.classList.remove('open');
+          const menu = navRoot.querySelector('.menu-btn');
+          menu?.setAttribute('aria-expanded', 'false');
+          menu?.setAttribute('aria-label', currentLanguage === 'ar' ? 'فتح القائمة' : 'Open menu');
+        }
+      });
     });
 
     document.querySelectorAll('form[data-demo]').forEach(form => {

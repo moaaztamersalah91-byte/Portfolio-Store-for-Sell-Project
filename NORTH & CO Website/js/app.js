@@ -45,4 +45,34 @@ function applyLang(){
 }
 function setLang(){lang=lang==="en"?"ar":"en";localStorage.setItem("northLang",lang);applyLang()}
 function toggleTheme(){document.body.classList.toggle("dark");localStorage.setItem("northTheme",document.body.classList.contains("dark")?"dark":"light")}
-document.addEventListener("DOMContentLoaded",()=>{if(localStorage.getItem("northTheme")==="dark")document.body.classList.add("dark");applyLang();document.querySelector("[data-lang]")?.addEventListener("click",setLang);document.querySelector("[data-theme]")?.addEventListener("click",toggleTheme);document.querySelector("[data-menu]")?.addEventListener("click",()=>document.querySelector(".links").classList.toggle("open"))});
+document.addEventListener("DOMContentLoaded",()=>{if(localStorage.getItem("northTheme")==="dark")document.body.classList.add("dark");applyLang();document.querySelector("[data-lang]")?.addEventListener("click",setLang);document.querySelector("[data-theme]")?.addEventListener("click",toggleTheme);const menuBtn=document.querySelector("[data-menu]");
+const links=document.querySelector(".links");
+if(menuBtn&&links){
+  menuBtn.setAttribute("aria-expanded","false");
+  menuBtn.setAttribute("aria-controls","mobile-navigation");
+  links.id="mobile-navigation";
+  menuBtn.addEventListener("click",()=>{
+    const open=links.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded",String(open));
+    menuBtn.textContent=open?"×":"☰";
+  });
+  links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+    links.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded","false");
+    menuBtn.textContent="☰";
+  }));
+  document.addEventListener("click",e=>{
+    if(!links.contains(e.target)&&!menuBtn.contains(e.target)){
+      links.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded","false");
+      menuBtn.textContent="☰";
+    }
+  });
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){
+      links.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded","false");
+      menuBtn.textContent="☰";
+    }
+  });
+}});
