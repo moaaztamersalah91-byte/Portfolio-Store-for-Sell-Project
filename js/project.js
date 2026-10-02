@@ -1,11 +1,3 @@
-var GITHUB_PAGES_BASE = '/Portfolio-Store-for-Sell-Project/';
-function githubProjectUrl(path) {
-  var clean = String(path || '')
-    .replace(/^(?:\.\.\/)+/, '')
-    .replace(/^\/+/, '');
-  return GITHUB_PAGES_BASE + clean;
-}
-
 (() => {
   const root=document.getElementById('projectDetail');
   if(!root)return;
@@ -44,7 +36,7 @@ function githubProjectUrl(path) {
     await remote();
     applyDisplayName();
     const lang=document.documentElement.lang;
-    root.innerHTML=`<section class="project-detail section-pad"><a class="back-link" href="projects.html">← <span data-i18n="backToArchive">Back to archive</span></a><div class="detail-head"><div><span class="section-index">${String(PORTFOLIO.projects.indexOf(p)+1).padStart(2,'0')}</span><span class="project-cat">${p.cat[lang]}</span><h1>${p.name[lang]}</h1><p>${p.desc[lang]}</p><div class="detail-stats"><span>↓ ${Number(p.downloadCount||0)} ${window.MOAazT('downloads')}</span></div></div><div class="detail-cover"><img src="${p.cover}" alt=""></div></div><div class="detail-body"><div><span class="section-index">02</span><h2 data-i18n="projectOverview">Project overview</h2><div class="project-detail-actions"><a class="btn btn-solid" href="${encodeURI(githubProjectUrl(p.path||'#'))}" target="_blank" rel="noopener" data-i18n="liveDemo">Explore</a><a class="btn btn-outline js-download" data-project-id="${p.slug}" href="${encodeURI(p.download||'#')}" download data-i18n="download">Download</a></div></div><div><p>${p.desc[lang]} ${lang==='ar'?'تم بناء الواجهة لتكون واضحة وسريعة وقابلة للتطوير مع الحفاظ على شخصية بصرية مستقلة.':'Built as a focused frontend experience with a strong visual point of view, responsive structure and a distinct interaction rhythm.'}</p><div class="tag-list">${(p.tags||[]).slice(0,8).map(t=>`<span>${t}</span>`).join('')}</div></div></div></section>`;
+    root.innerHTML=`<section class="project-detail section-pad"><a class="back-link" href="projects.html">← <span data-i18n="backToArchive">Back to archive</span></a><div class="detail-head"><div><span class="section-index">${String(PORTFOLIO.projects.indexOf(p)+1).padStart(2,'0')}</span><span class="project-cat">${p.cat[lang]}</span><h1>${p.name[lang]}</h1><p>${p.desc[lang]}</p><div class="detail-stats"><span>↓ ${Number(p.downloadCount||0)} ${window.MOAazT('downloads')}</span></div></div><div class="detail-cover"><img src="${p.cover}" alt=""></div></div><div class="detail-body"><div><span class="section-index">02</span><h2 data-i18n="projectOverview">Project overview</h2><div class="project-detail-actions"><a class="btn btn-solid" href="${encodeURI(p.path||'#')}" target="_blank" rel="noopener" data-i18n="liveDemo">Explore</a><a class="btn btn-outline js-download" data-project-id="${p.slug}" href="${encodeURI(p.download||'#')}" download data-i18n="download">Download</a></div></div><div><p>${p.desc[lang]} ${lang==='ar'?'تم بناء الواجهة لتكون واضحة وسريعة وقابلة للتطوير مع الحفاظ على شخصية بصرية مستقلة.':'Built as a focused frontend experience with a strong visual point of view, responsive structure and a distinct interaction rhythm.'}</p><div class="tag-list">${(p.tags||[]).slice(0,8).map(t=>`<span>${t}</span>`).join('')}</div></div></div></section>`;
     if(window.MOAazT)root.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=window.MOAazT(e.dataset.i18n));
     bind();
   }

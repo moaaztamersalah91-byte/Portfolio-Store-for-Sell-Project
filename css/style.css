@@ -862,8 +862,36 @@ body:after{
 }
 @media(max-width:480px){
   .section-pad{padding-left:17px;padding-right:17px}.site-header{padding:0 17px}
-  .brand{font-size:14px}.tool,.menu-btn{width:36px;height:36px}
+  .brand{font-size:14px}.tool,.menu-btn{width:32px;height:32px}
   .hero-actions{width:100%}.hero-actions .btn{width:100%;justify-content:space-between}
   .project-card{border-radius:18px}.project-cover{margin:6px 6px 0;border-radius:14px}
   .project-card-body{padding:18px 17px 15px}.contact-grid{grid-template-columns:1fr}
+}
+
+
+/* =========================================================
+   MOBILE NAVIGATION — HAMBURGER MENU
+   Desktop navigation remains unchanged.
+   ========================================================= */
+.menu-btn{display:none;position:relative;flex:0 0 auto;cursor:pointer;padding:0;overflow:hidden}
+.menu-btn span{display:block;width:13px;height:1.25px;background:currentColor;border-radius:999px;transition:transform .25s ease,opacity .18s ease,width .25s ease}
+.menu-btn span+span{margin-top:3px}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(4.25px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0;transform:translateX(6px)}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-4.25px) rotate(-45deg)}
+.mobile-menu{position:fixed;top:78px;inset-inline:14px;z-index:9996;display:flex;flex-direction:column;gap:6px;padding:10px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(24px) saturate(1.25);box-shadow:var(--shadow-strong);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px) scale(.98);transform-origin:top center;transition:opacity .22s ease,visibility .22s ease,transform .22s ease}
+.mobile-menu.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}
+.mobile-menu a{display:flex;align-items:center;justify-content:space-between;min-height:50px;padding:0 15px;border-radius:12px;color:var(--ink);font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:background .2s ease,color .2s ease,transform .2s ease}
+.mobile-menu a:hover,.mobile-menu a:focus-visible{background:var(--accent);color:#fff;outline:none;transform:translateX(2px)}
+.mobile-menu a.active{background:var(--accent-soft);color:var(--ink)}
+.mobile-menu a span:last-child{font-size:15px;letter-spacing:0;opacity:.7}
+.mobile-menu-backdrop{position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.18);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease}
+.mobile-menu-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
+@media(max-width:760px){
+  .menu-btn{display:grid}
+  .mobile-menu{top:78px}
+}
+@media(min-width:761px){.mobile-menu,.mobile-menu-backdrop{display:none!important}}
+@media(max-width:480px){
+  .mobile-menu{top:76px;inset-inline:10px;border-radius:16px}
 }
